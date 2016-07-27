@@ -2,10 +2,10 @@ package com.julienvey.trello.impl.http;
 
 import com.julienvey.trello.TrelloHttpClient;
 import com.julienvey.trello.exception.TrelloHttpException;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.*;
 
 import java.net.URI;
 
@@ -53,4 +53,10 @@ public class RestTemplateHttpClient implements TrelloHttpClient {
             throw new TrelloHttpException(e);
         }
     }
+
+	@Override
+	public <T> T delete(String url, String... params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -2,7 +2,7 @@ package com.julienvey.trello.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.julienvey.trello.impl.TrelloImpl;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -13,6 +13,7 @@ public class Organization extends TrelloEntity {
     private String displayName;
     private String desc;
     private List<String> idBoards;
+    private List<Board> boards;
     private boolean invited;
     private List<String> invitations;
     private List<Membership> memberships;
@@ -24,6 +25,13 @@ public class Organization extends TrelloEntity {
     private Prefs prefs;
     private List<String> products;
 
+    
+    public void populateBoards(TrelloImpl t){
+    	for (String bId: idBoards){
+    		boards.add(t.getBoard(bId));
+    	}
+    	
+    }
     public String getDesc() {
         return desc;
     }

@@ -1,7 +1,6 @@
 package com.julienvey.trello.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +26,8 @@ public class Board extends TrelloEntity {
     private Date dateLastView;
     private String shortLink;
     private List<String> powerUps;
+    private String displayName;
+    
 
     /* API */
 
@@ -214,8 +215,21 @@ public class Board extends TrelloEntity {
     public void setPowerUps(List<String> powerUps) {
         this.powerUps = powerUps;
     }
+    
+    @Override
+    public String toString(){
+    	return this.name;
+    }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+	@JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Prefs {
         private String permissionLevel;
         private String voting;
@@ -325,5 +339,7 @@ public class Board extends TrelloEntity {
         public void setCanInvite(boolean canInvite) {
             this.canInvite = canInvite;
         }
+        
+     
     }
 }

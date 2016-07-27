@@ -18,6 +18,9 @@ public class TrelloUrl {
     public static final String GET_BOARD_MEMBERS_INVITED = "/boards/{boardId}/membersInvited?";
     public static final String GET_BOARD_MYPREFS = "/boards/{boardId}/myPrefs?";
     public static final String GET_BOARD_ORGANIZATION = "/boards/{boardId}/organization?";
+    
+    public static final String GET_LIST_CARDS = "/lists/{listId}/cards?";
+
 
     public static final String GET_ACTION = "/actions/{actionId}?";
     public static final String GET_ACTION_BOARD = "/actions/{actionId}/board?";
@@ -28,6 +31,8 @@ public class TrelloUrl {
     public static final String GET_ACTION_MEMBER_CREATOR = "/actions/{actionId}/memberCreator?";
     public static final String GET_ACTION_ORGANIZATION = "/actions/{actionId}/organization?";
 
+    public static final String GET_ORGANIZATION = "/organizations/{orgId}?";
+    
     public static final String GET_CARD = "/cards/{cardId}?";
     public static final String GET_CARD_ACTIONS = "/cards/{cardId}/actions?";
     public static final String GET_CARD_ATTACHMENTS = "/cards/{cardId}/attachments?";
@@ -35,13 +40,17 @@ public class TrelloUrl {
     public static final String GET_CARD_BOARD = "/cards/{cardId}/board?";
 
     public static final String GET_LIST = "/lists/{listId}?";
+    public static final String UPDATE_LIST = "/lists/{listId}?";
 
+    
+    //public static final String PUT_BOARD_NAME = "/boards/{boardId}/name?";
     public static final String CREATE_CARD = "/cards?pos=top&";
+    public static final String CREATE_LIST = "/lists?pos=top&";
     public static final String GET_MEMBER = "/members/{username}?";
     public static final String ADD_LABEL_TO_CARD = "/cards/{cardId}/labels?";
-
+    public static final String ADD_ATTACHMENT_TO_CARD = "/cards/{cardId}/attachments?";
     public static final String UPDATE_CARD = "/cards/{cardId}?";
-
+    public static final String CREATE_BOARD = "/boards?pos=top&";
     private String baseUrl;
     private Argument[] args = {};
 

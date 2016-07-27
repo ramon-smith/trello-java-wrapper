@@ -20,6 +20,8 @@ public interface Trello {
     /* Board */
     Board getBoard(String boardId, Argument... args);
 
+    
+    
     List<Action> getBoardActions(String boardId, Argument... args);
 
     List<Card> getBoardCards(String boardId, Argument... args);
@@ -74,12 +76,19 @@ public interface Trello {
     Attachment getCardAttachment(String cardId, String attachmentId, Argument... args);
 
     Board getCardBoard(String cardId, Argument... args);
+    
+    
 
     /* Lists */
 
     TList getList(String listId, Argument... args);
 
+    TList createList(String boardId, TList list);
+    
     /////////////////
+    
+    
+    Board createBoard(String orgId, Board board);
 
     Card createCard(String listId, Card card);
 
@@ -92,5 +101,18 @@ public interface Trello {
     Member getBasicMemberInformation(String username);
 
     Member getMemberInformation(String username);
+
+	Organization getOrganization(String orgId, Argument... args);
+
+	void addAttachmentToCard(String idCard, Attachment attachment);
+
+	List<Card> getListCards(String listId, Argument... args);
+
+	void updateList(TList list);
+
+	void deleteAttachment(String idCard, String idAttachment);
+	
+	void loggerOn();
+	void loggerOff();
 
 }

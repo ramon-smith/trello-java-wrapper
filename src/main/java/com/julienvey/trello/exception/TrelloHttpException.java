@@ -2,7 +2,12 @@ package com.julienvey.trello.exception;
 
 public class TrelloHttpException extends RuntimeException {
 
-    public TrelloHttpException() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public TrelloHttpException() {
     }
 
     public TrelloHttpException(String message) {

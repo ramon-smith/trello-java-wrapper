@@ -146,6 +146,12 @@
             <artifactId>httpclient</artifactId>
             <version>${httpclient.version}</version>
             <optional>true</optional>
+            <exclusions>
+            	<exclusion>
+            		<artifactId>commons-codec</artifactId>
+            		<groupId>commons-codec</groupId>
+            	</exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.ning</groupId>

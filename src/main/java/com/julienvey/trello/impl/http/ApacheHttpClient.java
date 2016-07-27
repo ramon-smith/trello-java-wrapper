@@ -108,4 +108,10 @@ public class ApacheHttpClient extends AbstractHttpClient {
             httpRequest.releaseConnection();
         }
     }
+
+	@Override
+	public <T> T delete(String url, String... params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

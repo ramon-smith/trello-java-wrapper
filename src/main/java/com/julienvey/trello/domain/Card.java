@@ -39,6 +39,10 @@ public class Card extends TrelloEntity {
     public List<Action> getActions(Argument... filters) {
         return trelloService.getCardActions(id, filters);
     }
+    
+    public List<Attachment> getAttachments(Argument... filters){
+    	return trelloService.getCardAttachments(id, filters);
+    }
 
     /* Accessors */
     public String getId() {
@@ -215,6 +219,10 @@ public class Card extends TrelloEntity {
 
     public void setShortUrl(String shortUrl) {
         this.shortUrl = shortUrl;
+    }
+    
+    public void deleteAttachment(Attachment attachment){
+    	
     }
 
     public Card update() {

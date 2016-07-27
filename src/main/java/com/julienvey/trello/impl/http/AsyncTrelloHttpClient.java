@@ -124,4 +124,10 @@ public class AsyncTrelloHttpClient extends AbstractHttpClient {
             throw new TrelloHttpException(e);
         }
     }
+
+	@Override
+	public <T> T delete(String url, String... params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

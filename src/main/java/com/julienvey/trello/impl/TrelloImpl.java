@@ -19,8 +19,16 @@ public class TrelloImpl implements Trello {
     private TrelloHttpClient httpClient;
     private String applicationKey;
     private String accessToken;
+    private boolean loggerOn = false;
 
     private static Logger logger = LoggerFactory.getLogger(TrelloImpl.class);
+    
+    public void loggerOff(){
+    	loggerOn=false;
+    }
+    public void loggerOn(){
+    	loggerOn = true;
+    }
 
     // FIXME : remove me
     public TrelloImpl(String applicationKey, String accessToken) {
@@ -41,6 +49,13 @@ public class TrelloImpl implements Trello {
         board.setInternalTrello(this);
         return board;
     }
+    
+    @Override
+    public Organization getOrganization(String orgId, Argument... args) {
+    	Organization org = get(createUrl(GET_ORGANIZATION).params(args).asString(), Organization.class, orgId);
+    	org.setInternalTrello(this);
+    	return org;
+    }
 
     @Override
     public List<Action> getBoardActions(String boardId, Argument... args) {
@@ -54,6 +69,15 @@ public class TrelloImpl implements Trello {
     @Override
     public List<Card> getBoardCards(String boardId, Argument... args) {
         List<Card> cards = Arrays.asList(get(createUrl(GET_BOARD_CARDS).params(args).asString(), Card[].class, boardId));
+        for (Card card : cards) {
+            card.setInternalTrello(this);
+        }
+        return cards;
+    }
+    
+    @Override
+    public List<Card> getListCards(String listId, Argument... args) {
+        List<Card> cards = Arrays.asList(get(createUrl(GET_LIST_CARDS).params(args).asString(), Card[].class, listId));
         for (Card card : cards) {
             card.setInternalTrello(this);
         }
@@ -259,6 +283,14 @@ public class TrelloImpl implements Trello {
     }
 
     /* Others */
+    
+//    @Override
+//    public Attachment createAttachment(String cardId, Attachment attachment) {
+//        attachment.set
+//        Card createdCard = postForObject(createUrl(CREATE_CARD).asString(), card, Card.class);
+//        createdCard.setInternalTrello(this);
+//        return createdCard;
+//    }
 
     @Override
     public Card createCard(String listId, Card card) {
@@ -267,9 +299,24 @@ public class TrelloImpl implements Trello {
         createdCard.setInternalTrello(this);
         return createdCard;
     }
+    
+	@Override
+	public Board createBoard(String orgID, Board board){
+		board.setIdOrganization(orgID);
+		Board created = postForObject(TrelloUrl.createUrl(CREATE_BOARD).asString(), board, Board.class);
+		created.setInternalTrello(this);
+		return created;
+	}
+    
+	@Override
+	public TList createList(String boardId, TList list) {
+		list.setIdBoard(boardId);
+		TList createdList = postForObject(createUrl(CREATE_LIST).asString(), list, TList.class);
+		createdList.setInternalTrello(this);
+		return createdList;
+	}
 
-    @Override
-    //FIXME Remove this method
+	//FIXME Remove this method
     @Deprecated
     public Member getBasicMemberInformation(String username) {
         Member member = get(createUrl(GET_MEMBER).params(new Argument("fields", "username,fullName")).asString(), Member.class, username);
@@ -284,14 +331,32 @@ public class TrelloImpl implements Trello {
         return member;
     }
 
+    @Override
     public void addLabelsToCard(String idCard, String[] labels) {
         for (String label : labels) {
             postForLocation(createUrl(ADD_LABEL_TO_CARD).asString(), new Label(label), idCard);
         }
     }
+    
+    @Override
+    public void addAttachmentToCard(String idCard, Attachment attachment) {
+    	System.out.println("adding attachment "+ attachment.getName() + " url " + attachment.getUrl());
+        postForLocation(createUrl(ADD_ATTACHMENT_TO_CARD).asString(), attachment, idCard);
+    }
+    @Override
+    public void updateList(TList list){
+    	System.out.println("updating list "+list.getName());
+    	put(createUrl(UPDATE_LIST).asString(),list,TList.class,list.getId());
+    }
+    
+    @Override
+    public void deleteAttachment(String idCard, String idAttachment){
+    	delete(createUrl(GET_CARD_ATTACHMENT).asString(),idAttachment,idCard);
+    }
 
     @Override
     public Card updateCard(Card card) {
+    	System.out.println("Updating card "+ card.getName());
         Card put = put(createUrl(UPDATE_CARD).asString(), card, Card.class, card.getId());
         put.setInternalTrello(this);
         return put;
@@ -300,23 +365,31 @@ public class TrelloImpl implements Trello {
     /* internal methods */
 
     private <T> T postForObject(String url, T object, Class<T> objectClass, String... params) {
-        logger.debug("PostForObject request on Trello API at url {} for class {} with params {}", url, objectClass.getCanonicalName(), params);
+        if (loggerOn)
+        	logger.debug("PostForObject request on Trello API at url {} for class {} with params {}", url, objectClass.getCanonicalName(), params);
         return httpClient.postForObject(url, object, objectClass, enrichParams(params));
     }
 
     private void postForLocation(String url, Object object, String... params) {
-        logger.debug("PostForLocation request on Trello API at url {} for class {} with params {}", url, object.getClass().getCanonicalName(), params);
+    	if (loggerOn)
+        	logger.debug("PostForLocation request on Trello API at url {} for class {} with params {}", url, object.getClass().getCanonicalName(), params);
         httpClient.postForLocation(url, object, enrichParams(params));
     }
 
     private <T> T get(String url, Class<T> objectClass, String... params) {
-        logger.debug("Get request on Trello API at url {} for class {} with params {}", url, objectClass.getCanonicalName(), params);
+    	if (loggerOn)
+        	logger.debug("Get request on Trello API at url {} for class {} with params {}", url, objectClass.getCanonicalName(), params);
         return httpClient.get(url, objectClass, enrichParams(params));
     }
 
     private <T> T put(String url, T object, Class<T> objectClass, String... params) {
-        logger.debug("Put request on Trello API at url {} for class {} with params {}", url, object.getClass().getCanonicalName(), params);
+    	if (loggerOn)
+        	logger.debug("Put request on Trello API at url {} for class {} with params {}", url, object.getClass().getCanonicalName(), params);
         return httpClient.putForObject(url, object, objectClass, enrichParams(params));
+    }
+    
+    private void delete(String url, String... params) {
+    	httpClient.delete(url, enrichParams(params));
     }
 
     private String[] enrichParams(String[] params) {
@@ -325,4 +398,6 @@ public class TrelloImpl implements Trello {
         paramList.add(accessToken);
         return paramList.toArray(new String[paramList.size()]);
     }
+
+
 }

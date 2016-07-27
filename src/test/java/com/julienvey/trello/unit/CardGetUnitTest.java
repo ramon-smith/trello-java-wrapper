@@ -5,7 +5,6 @@ import com.julienvey.trello.TrelloHttpClient;
 import com.julienvey.trello.domain.*;
 import com.julienvey.trello.impl.TrelloImpl;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -13,7 +12,6 @@ import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.*;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
